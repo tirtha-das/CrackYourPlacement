@@ -1,40 +1,57 @@
- import java.util.*;
- 
- 
+import java.util.*;
  
  class TreeNode {
-      int val;
-      TreeNode left;
-      TreeNode right;
-      TreeNode() {}
-      TreeNode(int val) { this.val = val; }
+     int val;
+     TreeNode left;
+     TreeNode right;
+     TreeNode() {}
+     TreeNode(int val) { this.val = val; }
      TreeNode(int val, TreeNode left, TreeNode right) {
-          this.val = val;
-          this.left = left;
+         this.val = val;
+         this.left = left;
          this.right = right;
      }
-  }
+ }
  
 class BSTIterator {
-    Stack<TreeNode> s1 = new Stack<>();
-    public BSTIterator(TreeNode root) {
-        pushAll(root);
-    }
-    
-    public int next() {
-        TreeNode curr = s1.pop();
-        pushAll(curr.right);
-        return curr.val;
-    }
-    
-    public boolean hasNext() {
-        return !s1.isEmpty();
-    }
-    public void pushAll(TreeNode root){
-        while(root != null){
-            s1.push(root);
-            root = root.left;
-        }
-    }
-}
-
+    List<Integer> all;
+    int i=0;
+     public void Inorder(TreeNode root)
+     {       
+         if(root==null)
+             return;
+         
+         Stack<TreeNode> st= new Stack<>();
+         st.push(root);
+         while(!st.isEmpty())
+         {
+             while(root.left!=null)
+             {
+                 st.push(root.left);
+                 root=root.left;
+             }
+             TreeNode temp=st.pop();
+             all.add(temp.val);
+             if(temp.right!=null)
+             {
+                 root=temp.right;
+                 st.push(root);
+             }
+         }
+     }
+     public BSTIterator(TreeNode root) {
+         all= new ArrayList<>();
+         Inorder(root);
+     }
+     
+     public int next() {
+         return all.get(i++);
+     }
+     
+     public boolean hasNext() {
+         if(i==all.size())
+             return false;
+         return true;
+     }
+ }
+ 
