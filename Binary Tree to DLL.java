@@ -11,23 +11,34 @@ class Node
 	
 }
 
-class Solution{
-    //Function to convert binary tree to doubly linked
-    Node prev= null;
-    Node head= null;
+
+class Solution
+{
+    Node head,prev;
     
-    Node bToDLL(Node root){
-	    if(root==null) return root;
-	    bToDLL(root.left);
-	    if(prev==null){
-	        head= root;
-	        prev= root;
-	    }else{
-	        root.left= prev;
-	        prev.right= root;
-	        prev= root;
-	    }
-	    bToDLL(root.right);
+    Node bToDLL(Node root)
+    {
+	    prev = null;
+	    convertDLL(root);
 	    return head;
+    }
+    
+    void convertDLL(Node root) {
+        if(root == null)  return ;
+        
+        convertDLL(root.left);
+        
+        if(prev == null) {
+            head = root;
+        }else {
+            root.left = prev;
+            prev.right = root;
+        }
+        
+        prev = root;
+        
+        convertDLL(root.right);
+        
+        return ;
     }
 }
