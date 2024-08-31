@@ -1,62 +1,62 @@
-import java.util.*;
 
 
+ class GfG {
+  
+    static boolean isSafe(char[][] M, int r, int c, 
+                                      boolean[][] visited) {
+        int ROW = M.length;
+        int COL = M[0].length;
 
-
-class Solution {
-    public int numIslands(char[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        int sol = 0;
-        int[][] vis = new int[m][n];
-        for (int r=0;r<m;r++)
-        {
-            for (int c=0;c<n;c++)
-            {
-                if(grid[r][c]=='1' && vis[r][c]==0)
-                {
-                    sol++;
-                    bfs(r,c,vis,grid);
-                }
-            }
-        }
-        return sol;
+        return r >= 0 && r < ROW && c >= 0 && c < COL 
+                          && M[r][c] == '1' && !visited[r][c];
     }
-    public void bfs(int r,int c,int[][] vis,char[][] grid)
-    {
-        int m = grid.length;
-        int n = grid[0].length;
-        Queue<Pair> q = new LinkedList<>();
-        vis[r][c]=1;
-        q.add(new Pair(r,c));
-        int[] arow={-1,0,0,1};
-        int[] acol={0,-1,+1,0};
-        while(!q.isEmpty())
-        {
-            int row=q.peek().r;
-            int col=q.peek().c;
-            q.remove();
-            for (int i=0;i<arow.length;i++)
-            {
-                int row1=row+arow[i];
-                int col1=col+acol[i];
-                if(row1>=0 && row1<m && col1>=0 && col1<n && 
-                grid[row1][col1]=='1' && vis[row1][col1]==0)
-                {
-                    q.add(new Pair(row1,col1));
-                    vis[row1][col1]=1;
-                }
+
+    static void DFS(char[][] M, int r, int c,
+                                        boolean[][] visited) {
+         int[] rNbr = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] cNbr = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
+         visited[r][c] = true;
+
+        for (int k = 0; k < 8; ++k) {
+            int newR = r + rNbr[k];
+            int newC = c + cNbr[k];
+            if (isSafe(M, newR, newC, visited)) {
+                DFS(M, newR, newC, visited);
             }
         }
     }
-}
-class Pair
-{
-    int r;
-    int c;
-    Pair(int r,int c)
-    {
-        this.r=r;
-        this.c=c;
+
+    static int countIslands(char[][] M) {
+        int ROW = M.length;
+        int COL = M[0].length;
+
+        boolean[][] visited = new boolean[ROW][COL];
+
+        int count = 0;
+        for (int r = 0; r < ROW; ++r) {
+            for (int c = 0; c < COL; ++c) {
+              
+                if (M[r][c] == '1' && !visited[r][c]) {
+                    
+                     DFS(M, r, c, visited);
+                    
+                       ++count;
+                }
+            }
+        }
+        return count;
+    }
+
+   public static void main(String[] args) {
+        char[][] M = {
+            { '1', '1', '0', '0', '0' },
+            { '0', '1', '0', '0', '1' },
+            { '1', '0', '0', '1', '1' },
+            { '0', '0', '0', '0', '0' },
+            { '1', '0', '1', '1', '0' }
+        };
+
+        System.out.println(countIslands(M));
     }
 }
